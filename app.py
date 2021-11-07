@@ -228,5 +228,15 @@ if __name__ == '__main__':
     app()
     
     
-    for book in session.query(Book):
-        print(book)
+    #for book in session.query(Book):
+     #   print(book)
+        
+"""
+Try creating one menu function
+Add docstrings to each function
+Add type hinting
+Try creating pagination for the books so you only see 5 books at a time when viewing them
+Try giving the user options for searching for a book (besides searching by id)
+Try adding other columns to your database like topic area, difficulty level, number of pages, etc.
+Try creating a practice app using SQLAlchemy!
+"""
