@@ -50,7 +50,6 @@ def clean_date(date_str):
         return 
     else:
         return return_date
-
     
     
 def clean_price(price_str):
@@ -66,6 +65,21 @@ def clean_price(price_str):
         return 
     else:
         return int(price_float * 100)
+    
+    
+def clean_id(id_str):
+    try:
+        book_id = int(id_str)
+    except ValueError:
+        input('''
+              \n***** ID Error ******
+              \rThe id should be a number.
+              \rPress enter to try again.
+              \r*************''')
+        return 
+    else:
+        return book_id
+
 
 def add_csv():
     with open('suggested_books.csv') as csvfile:
@@ -74,9 +88,9 @@ def add_csv():
             book_in_db = session.query(Book).filter(Book.title==row[0]).one_or_none()
             if book_in_db == None:
                 title = row[0]
-                price = clean_price(row[1])
-                author = row[2]
-                date = clean_date(row[3])
+                author = row[1]
+                date = clean_date(row[2])
+                price = clean_price(row[3])
                 new_book = Book(title=title, author=author, published_date=date, price=price)
                 session.add(new_book)
         session.commit()
@@ -109,11 +123,21 @@ def app():
         elif choice == '2':
             # view books
             for book in session.query(Book):
-                print(f'{book.id} | {book.title} | {book.author}')
+                print(f'{book.id} | {book.title} | {book.author} | {book.published_date} | {book.price}')
             input('\nPress enter to return to the main menu.')
         elif choice == '3':
             # search for book
-            pass
+            id_options = []
+            for book in session.query(Book):
+                id_options.append(book.id)
+            id_error = True
+            while id_error:   
+                id_choice = input(f'''
+                    \nId Options: {id_options}
+                    \rBook id:  ''')
+                id_choice = clean_id(id_choice)
+                if type(id_choice) == int:
+                    id_error = False
         elif choice == '4':
             # book anaylsis
             pass
@@ -124,7 +148,7 @@ def app():
 
 if __name__ == '__main__':
     Base.metadata.create_all(engine)
-    #add_csv() #csv file not working
+    add_csv()
     app()
     
     
